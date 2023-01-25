@@ -1,8 +1,10 @@
 # NLP 202 Homework 1
 
-Kushagra Seth
-kuseth@ucsc.edu
-2005986
+```bash
+Name: Kushagra Seth
+Email: kuseth@ucsc.edu
+Student Id: 2005986
+```
 
 ## Usage
 
