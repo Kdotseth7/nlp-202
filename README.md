@@ -1,5 +1,9 @@
 # NLP 202 Homework 1
 
+Kushagra Seth
+kuseth@ucsc.edu
+2005986
+
 ## Usage
 
 ### Run Experiment
