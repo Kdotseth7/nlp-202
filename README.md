@@ -1,2 +1,11 @@
-# nlp-202-a1-minibatching
-The purpose of this homework is to understand how to implement minibatching in PyTorch. You will need to implement a logistic regression model and a LSTM model in PyTorch that uses minibatching on the sentiment analysis task. 
+# NLP 202 Homework 1
+
+## Usage
+
+### Run Experiment
+
+```bash
+Run a1_logistic_regression.ipynb and a1_lstm.ipynb seperately on google colab
+```
+
+This command will run all the experiments mentioned in the problem set.
