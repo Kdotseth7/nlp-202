@@ -13,3 +13,9 @@ Student Id: 2005986
 ```bash
 Run a1_logistic_regression.ipynb and a1_lstm.ipynb seperately on google colab
 ```
+
+### Github Repo
+
+```bash
+https://github.com/Kdotseth7/nlp-202
+```
