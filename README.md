@@ -1,5 +1,7 @@
 # NLP-202 HW Repository
 
-### Kushagra Seth
+## Kushagra Seth
+
 ### kuseth@ucsc.edu
+
 ### 2005986
