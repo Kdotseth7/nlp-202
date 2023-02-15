@@ -1,5 +1,5 @@
 import optparse
-from rule import Rule
+from rule import Rule, Pcfg_Rule
 from grammar import Grammar
 from tabulate import tabulate
 from cky import CKY
@@ -12,21 +12,21 @@ optparser.add_option("--pcfg-cky", dest="pcfg_cky", action="store_true", help="U
 
 def run_cky():
     # Rules in Chomsky Normal Form(CNF)
-    rules = [
-                Rule("S", "NP VP"),
-                Rule("NP", "JJ NP"),
-                Rule("VP", "VP NP"),
-                Rule("VP", "VP PP"),
-                Rule("PP", "P NP"),
-                Rule("NP", "British"),
-                Rule("JJ", "British"),
-                Rule("NP", "left"),
-                Rule("VP", "left"),
-                Rule("NP", "waffles"),
-                Rule("VP", "waffles"),
-                Rule("P", "on"),
-                Rule("NP", "Falklands")
-            ]
+    rules = [   
+        Rule("S", "NP VP"),
+        Rule("NP", "JJ NP"),
+        Rule("VP", "VP NP"),
+        Rule("VP", "VP PP"),
+        Rule("PP", "P NP"),
+        Rule("NP", "British"),
+        Rule("JJ", "British"),
+        Rule("NP", "left"),
+        Rule("VP", "left"),
+        Rule("NP", "waffles"),
+        Rule("VP", "waffles"),
+        Rule("P", "on"),
+        Rule("NP", "Falklands")
+    ]
     # Grammar: A set of rules
     grammar = Grammar(rules)
     
@@ -42,7 +42,33 @@ def run_cky():
 
 
 def run_pcfg_cky():
-    pass
+    # Rules in Chomsky Normal Form(CNF) with probabilities
+    rules = [
+        Pcfg_Rule("S", "NP VP", 1.0),
+        Pcfg_Rule("PP", "P NP", 1.0),
+        Pcfg_Rule("VP", "V NP", 0.7),
+        Pcfg_Rule("VP", "VP PP", 0.3),
+        Pcfg_Rule("P", "with", 1.0),
+        Pcfg_Rule("V", "saw", 1.0),
+        Pcfg_Rule("NP", "NP PP", 0.4),
+        Pcfg_Rule("NP", "astronomers", 0.4),
+        Pcfg_Rule("NP", "ears", 0.18),
+        Pcfg_Rule("NP", "saw", 0.04),
+        Pcfg_Rule("NP", "stars", 0.18),
+        Pcfg_Rule("NP", "telescopes", 0.1)
+    ]
+    # Grammar: A set of rules
+    grammar = Grammar(rules)
+    
+    # Sentence to parse
+    sentence = "astronomers saw stars with ears"
+    # Split the sentence into words
+    words = sentence.split(" ")
+
+    # Perform PCFG CKY parsing on the sentence
+    pcfg_cky_table, parse_tree = CKY.pcfg_cky(words, grammar)
+    print("================================PCFG CKY Table================================")
+    print(tabulate(pcfg_cky_table, headers=words, tablefmt="fancy_grid", showindex="always"))
 
 
 if __name__ == "__main__":
