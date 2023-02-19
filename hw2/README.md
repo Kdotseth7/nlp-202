@@ -19,5 +19,5 @@ python main.py --cky
 Run Weighted CKY Algorithm + Sum Over All Parse Trees
 
 ```bash
-python main.py --pcfg-cky
+python main.py --wcky
 ```

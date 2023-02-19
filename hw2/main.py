@@ -1,13 +1,15 @@
 import optparse
+
 from rule import Rule, Pcfg_Rule
 from grammar import Grammar
 from tabulate import tabulate
 from cky import CKY
+from tree import print_tree, marginalize_trees
 
 # Parse command-line arguments
 optparser = optparse.OptionParser()
 optparser.add_option("--cky", dest="cky", action="store_true", help="Use CKY algorithm for parsing")
-optparser.add_option("--pcfg-cky", dest="pcfg_cky", action="store_true", help="Use PCFG CKY algorithm for parsing")
+optparser.add_option("--wcky", dest="wcky", action="store_true", help="Use Weighted CKY algorithm for parsing")
 (opts, _) = optparser.parse_args()
 
 def run_cky():
@@ -37,11 +39,11 @@ def run_cky():
     
     # Perform CKY parsing on the sentence
     cky_table = CKY.cky(words, grammar)
-    print("================================CKY Table================================")
+    print("CKY Table:")
     print(tabulate(cky_table, headers=words, tablefmt="fancy_grid", showindex="always"))
 
 
-def run_pcfg_cky():
+def run_wcky():
     # Rules in Chomsky Normal Form(CNF) with probabilities
     rules = [
         Pcfg_Rule("S", "NP VP", 1.0),
@@ -66,15 +68,23 @@ def run_pcfg_cky():
     words = sentence.split(" ")
 
     # Perform PCFG CKY parsing on the sentence
-    pcfg_cky_table, parse_tree = CKY.pcfg_cky(words, grammar)
-    print("================================PCFG CKY Table================================")
-    print(tabulate(pcfg_cky_table, headers=words, tablefmt="fancy_grid", showindex="always"))
+    wcky_tables, parse_trees = CKY.weighted_cky(words, grammar)
+    best_tree = max(parse_trees, key=lambda node: node.score)
+    print("Weighted CKY Table:")
+    print(tabulate(wcky_tables, headers=words, tablefmt="fancy_grid", showindex="always"))
+    
+    # Pretty print the best tree
+    print("Most Probable Parse Tree:")
+    print_tree(best_tree)
+    
+    # Marginalize over all results trees
+    print(f"Probability of Sentence: {marginalize_trees(parse_trees)}")
 
 
 if __name__ == "__main__":
     if opts.cky:
         run_cky()
-    elif opts.pcfg_cky:
-        run_pcfg_cky()
+    elif opts.wcky:
+        run_wcky()
     else:
         raise NotImplementedError("Please specify an algorithm to use for parsing")
