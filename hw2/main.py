@@ -4,7 +4,7 @@ from rule import Rule, Pcfg_Rule
 from grammar import Grammar
 from tabulate import tabulate
 from cky import CKY
-from tree import print_tree, marginalize_trees
+from tree import print_tree, marginalize_prob
 
 # Parse command-line arguments
 optparser = optparse.OptionParser()
@@ -69,16 +69,16 @@ def run_wcky():
 
     # Perform PCFG CKY parsing on the sentence
     wcky_tables, parse_trees = CKY.weighted_cky(words, grammar)
-    best_tree = max(parse_trees, key=lambda node: node.score)
     print("Weighted CKY Table:")
-    print(tabulate(wcky_tables, headers=words, tablefmt="fancy_grid", showindex="always"))
+    print(tabulate(wcky_tables, headers=words, tablefmt="fancy_grid", showindex="always", maxcolwidths=30))
     
-    # Pretty print the best tree
+    # Print the Most Probable Tree
+    most_probable_tree = max(parse_trees, key=lambda node: node.score)
     print("Most Probable Parse Tree:")
-    print_tree(best_tree)
+    print_tree(most_probable_tree)
     
-    # Marginalize over all results trees
-    print(f"Probability of Sentence: {marginalize_trees(parse_trees)}")
+    # Marginalize the parse trees to get the probability of the sentence
+    print(f"Marginal Probability of Sentence: {marginalize_prob(parse_trees)}")
 
 
 if __name__ == "__main__":

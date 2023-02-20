@@ -15,17 +15,30 @@ class Node:
             right (Node): The right child of the node.
             word (str, optional): The word value of the node. Defaults to None.
         """
-        # If it is the leaf of the tree, let it attach to the word string
-        self.value = non_terminal if word is None else f"{non_terminal}-{word}"
-        self.left, self.right = left, right
+        # Set the value of the node based on whether it is a leaf or not
+        if word is None:
+            self.value = non_terminal
+        else:
+            self.value = f"{non_terminal}-{word}"
+        
+        # Set the left and right child nodes
+        self.left = left
+        self.right = right
 
-        # Zero if no leaves
-        left_score = 0 if self.left is None else self.left.score
-        right_score = 0 if self.right is None else self.right.score
-
-        # Calculate the score in the log space
+        # Set the score of the node based on the log probability of the node and its children
+        if self.left is None:
+            left_score = 0
+        else:
+            left_score = self.left.score
+            
+        if self.right is None:
+            right_score = 0
+        else:
+            right_score = self.right.score
+        
         self.score = log_prob + left_score + right_score
-        # Calculate back the probability
+        
+        # Calculate the probability of the node
         self.prob = math.exp(self.score)
 
     def __repr__(self):
@@ -38,7 +51,7 @@ class Node:
         return str(self.prob)
     
     
-def marginalize_trees(trees):
+def marginalize_prob(trees):
     """
     Calculates the marginal probability of a list of trees.
 
@@ -50,8 +63,7 @@ def marginalize_trees(trees):
     """
     if not trees:
         return 0
-    prob = sum([tree.prob for tree in trees])
-    return prob
+    return sum([tree.prob for tree in trees])
 
 def print_tree(node, node_name_attr='value', left_child_attr='left', right_child_attr='right', indent='', last_link='updown'):
     """Prints a syntax tree for the given node.
